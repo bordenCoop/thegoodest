@@ -1,0 +1,133 @@
+<head>
+  <meta http-equiv="refresh" content="338">
+</head>
+
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous">
+</script>
+
+<body onload="startTime();">
+<link rel="stylesheet" type="text/css" href="main.css">
+
+<div>
+    <div id="pictures">
+        <video width="100%" height="100%" controls autoplay loop>
+ <source src="/video/LSC_CapabilityFocus_v1.2.mp4" type="video/mp4">
+ 
+ Your browser does not support the video tag.
+</video>
+    </div>
+    <div id="weatherAndLogo">
+        <div id="weather">
+            <div id="weatherIcon">
+            </div>
+            <div id="weatherInfo"> 
+                <div id="clock"></div>
+                <div id="city"></div>
+                <div id="temp"></div>
+                <div id="synopsis"></div>
+            </div>
+        </div>
+        <div id="logo">
+            <img src="images/MPCLSC_Logo.PNG">
+            
+        </div>
+    </div>
+    <div id="newfeed">
+    </div>
+</div>
+</body>
+
+<script>
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('clock').innerHTML =
+            h + ":" + m + ":" + s;
+        var t = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i
+        }; 
+        return i;
+    }
+</script>
+
+
+<script>
+getweather();
+function getweather() // weather api key : e529c71a6b29bb50
+	{  
+	   $.ajax({ url :"http://api.wunderground.com/api/e529c71a6b29bb50/geolookup/conditions/q/ontario/barrie.json",
+	   dataType : "jsonp",
+	   success : function(parsed_json) 
+	               {
+	               var humid = parsed_json ['current_observation']['relative_humidity'];
+	               var location = parsed_json['location']['city'];
+	               var temp_f = parsed_json['current_observation']['temp_f'];
+	               var temp_c = parsed_json['current_observation']['temp_c'];
+	               var synopsis = parsed_json['current_observation']['weather']; 
+	               var wind = parsed_json['current_observation']['wind_string'];
+	               $("#temp").html(temp_c+"<sup>o<\/sup>C" );
+	               $("#humid").html("Humidity: "+humid);
+	               $("#city").html(location+", ON");
+	               $("#synopsis").html(synopsis);
+	               $("#wind").html( "Wind: " + wind);
+	                   
+	               if (synopsis == 'Partly Cloudy') { $('#weatherIcon').html('<img src="images-weather/m-cloudy.png"/>'); }
+	               if (synopsis == 'Drizzle') { $('#weatherIcon').html('<img src="images-weather/fair-drizzle.png" />'); }
+	               if (synopsis == 'Rain') { $('#weatherIcon').html('<img src="images-weather/rainy.png" />'); }
+	               if (synopsis == 'Snow') { $('#weatherIcon').html('<img src="images-weather/snow.png" />'); }
+	               if (synopsis == 'Mist') { $('#weatherIcon').html('<img src="images-weather/fair-drizzle.png" />'); }
+	               if (synopsis == 'Thunderstorm') { $('#weatherIcon').html('<img src="images-weather/thunderstorm.png" />'); }
+	               if (synopsis == 'Overcast') { $('#weatherIcon').html('<img src="images-weather/fair.png" style="height:100%; width:100%;"/>'); }
+	               if (synopsis == 'Clear') { $('#weatherIcon').html('<img src="images-weather/sunny2.png" />'); }
+                   if (synopsis == 'Mostly Cloudy') { $('#weatherIcon').html('<img src="images-weather/fair.png" />'); }
+                   if (synopsis == '') { $('#weatherIcon').html('<img src="images-weather/na.png" />'); }
+                   if (synopsis == 'Unknown') { $('#weatherIcon').html('<img src="images-weather/na.png" />'); $('#synopsis').html(''); }
+                   }
+	          });
+			  setInterval(function(){
+	getweather();
+},600000);//get updated weather info every 10min
+	};
+</script>
+<script>
+    $(document).ready(function() {
+        rssNews();
+    });
+    
+    function rssNews() {
+        var newsCounter=12;
+        var array = [];
+        $.get("http://barrie.ctvnews.ca/rss/ctv-news-barrie-1.1293974", function(data) {
+            var $xml = $(data);
+            $xml.find("item").each(function(i, val) {
+                var $this = $(this),
+                    item = {
+                        title: $this.find("title").text(),
+                        description: $this.find("description").text()
+                    };
+                array.push(item.description);
+            });
+        });
+        setInterval(function() {
+            document.getElementById("newfeed").innerHTML = array[newsCounter];
+            newsCounter--;
+            if (newsCounter == 0) {
+                //newsCounter = array.length - 1;
+                newsCounter = 12;
+            }
+        }, 10000);
+    };
+    setInterval(function() {
+        rssNews();
+    }, 2400000);
+</script>

@@ -1,0 +1,92 @@
+body {
+    padding:0;
+    margin:0;
+    background-color:black;
+    color:white;
+}
+
+#pictures {
+    margin-top: .5%;
+    margin-left:.5%;
+    margin-right: .5%;
+    width:72%;
+    height:86%;
+    display:inline-block;
+    margin-bottom:1%;
+
+}
+
+#weatherAndLogo {
+    width:24.7%;
+    height:75%; 
+    display:inline-block; 
+    vertical-align: top;
+}
+
+#weather {
+    height:50%;
+    width:50%; 
+}
+
+#logo {
+    height:45%;
+    margin-top: 21%;
+}
+
+#newfeed {
+    font-size:30px;
+    padding-left:1%;
+    padding-right:1%;
+}
+
+img {
+    width:100%;
+    height:100%;
+    border-radius: 10px;
+}
+
+#weatherInfo {
+    display:inline-block;
+    width:4%;
+    float:right;
+    margin-top: 20%;
+}
+
+#weatherIcon {
+display:inline-block;
+width:75%;
+height:50%;
+margin-top:35%;
+margin-left:10%;
+	   } 
+
+#city {
+    font-size:28px; 
+    width:238px; 
+    height:28px; 
+    left: 255px; 
+    top: 35px;
+    display:inline-block;
+}
+#temp {
+font-size:65px; 
+width:233px;
+margin-top:-15px;  
+}
+#synopsis {
+    font-size:22px;      
+	   } 
+
+#logo2 {
+    display:none;
+}
+
+#logo3 {
+    display:none;
+}
+
+#clock {
+    font-size:40px;
+    margin-bottom: 20px;
+    display:block;
+}
